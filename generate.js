@@ -1,60 +1,66 @@
-const fs = require('fs');
-const nativeCSS = require('native-css');
-const R = require('ramda');
+const fs = require('fs')
+const nativeCSS = require('native-css')
+const R = require('ramda')
 
-const tachyonsModules = require('tachyons-modules');
+const tachyonsModules = require('tachyons-modules')
 
 const moduleBlacklist = [
   'react-native-style-tachyons',
+  'jekyll-tachyons',
+  'tachyons-and-react',
+  'tachyons-custom',
+  'tachyons-debug-children',
   'tachyons-base',
   'tachyons-build-css',
   'tachyons-debug',
+  'tachyons-debug-grid',
   'tachyons-display-verbose',
   'tachyons-verbose',
   'tachyons-webpack',
-];
+  'tachyons-x-ray',
+  'img'
+]
 
 // concatMediaQueries :: String -> { k: v } -> { k: v } -> *
 function concatMediaQueries (key, left, right) {
-  return R.merge(left, right);
+  return R.merge(left, right)
 }
 
 // toJS :: CSS -> { k: v }
 const toJS = R.reduce((acc, [k, v]) => {
-  return R.mergeWithKey(concatMediaQueries, acc, nativeCSS.convert(v));
+  return R.mergeWithKey(concatMediaQueries, acc, nativeCSS.convert(v))
 }, {})
-
 
 const queries = {
   '@media (--breakpoint-not-small)': '@media screen and (min-width: 48em)',
   '@media (--breakpoint-medium)': '@media screen and (min-width: 48em) and (max-width: 64em)',
-  '@media (--breakpoint-large)': '@media screen and (min-width: 64em)',
+  '@media (--breakpoint-large)': '@media screen and (min-width: 64em)'
 }
 
-const queryKeys = R.keys(queries);
+const queryKeys = R.keys(queries)
 
 // mergeMediaQueries :: a -> a
 const mergeMediaQueries = styles => {
-  const noQueries = R.omit(queryKeys, styles);
+  const noQueries = R.omit(queryKeys, styles)
 
   const flipMediaQuery = key => {
-    const rules = styles[key];
+    const rules = styles[key]
 
     return R.reduce((acc, selector) => {
-      const newBp = queries[key];
-      return R.assocPath([selector, newBp], rules[selector], acc);
-    }, {}, R.keys(rules));
+      const newBp = queries[key]
+      return R.assocPath([selector, newBp], rules[selector], acc)
+    }, {}, R.keys(rules))
   }
 
   const flippedQueries = R.reduce((acc, key) => {
-    return R.merge(acc, flipMediaQuery(key));
-  }, {}, queryKeys);
+    return R.merge(acc, flipMediaQuery(key))
+  }, {}, queryKeys)
 
-  return R.merge(noQueries, flippedQueries);
+  return R.merge(noQueries, flippedQueries)
 }
 
 // addExports :: String -> String
-function addExports(json) { return `module.exports = ${json}` }
+function addExports (json) { return `module.exports = ${json}` }
 
 // toJSON :: { k: v } -> JSON
 const toJSON = R.compose(
@@ -63,11 +69,11 @@ const toJSON = R.compose(
 )
 
 // writeFile :: JSON -> Promise [fs]
-function writeFile(file) {
-  return new Promise((res, rej) => {
+function writeFile (file) {
+  return new Promise((resolve, reject) => {
     fs.writeFile('index.js', file, (err, result) => {
-      if (err) { rej(err) }
-      res(result);
+      if (err) { reject(err) }
+      resolve(result)
     })
   })
 }
@@ -77,7 +83,7 @@ function constructFile (modules, module) {
   var moduleLocation = getModuleCssLocation(module)
   var moduleName = getModuleKey(module)
   // const key = '_' + moduleName + '.css';
-  return R.assoc(moduleName, moduleLocation, modules);
+  return R.assoc(moduleName, moduleLocation, modules)
 }
 
 // isTachyonsModule :: String -> Boolean
@@ -121,24 +127,26 @@ const stripHoverSuffix = R.replace(hoverRegex, '')
 const extractHoverStyles = styles => {
   return R.reduce((acc, key) => {
     if (isHoverStyle(key)) {
-      const rootKey = stripHoverSuffix(key);
+      const rootKey = stripHoverSuffix(key)
 
       if (styles[rootKey]) {
         return R.compose(
           R.dissoc(key),
           R.assoc(':hover', styles[key])
-        )(acc);
+        )(acc)
       }
 
       return R.compose(
         R.dissoc(key),
         R.assoc(rootKey, { ':hover': styles[key] })
-      )(acc);
+      )(acc)
     }
-    return acc;
-  }, styles, R.keys(styles));
+    return acc
+  }, styles, R.keys(styles))
 }
-
+const snake = '_'
+const kabab = '-'
+const snakeToKebab = () => R.replace(snake, kabab)
 
 tachyonsModules()
   .then(R.pluck('name'))
