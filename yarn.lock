@@ -453,6 +453,14 @@ supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
 
+tachyons-aspect-ratios@*:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/tachyons-aspect-ratios/-/tachyons-aspect-ratios-1.0.1.tgz#4b30e0dd105b2331f722baf8bf013c8f43c82c40"
+
+tachyons-background-position@*:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tachyons-background-position/-/tachyons-background-position-1.0.3.tgz#dca3bb6181f3aa4feab2b81dcc64b0551f253706"
+
 tachyons-background-size@*:
   version "5.0.5"
   resolved "https://registry.yarnpkg.com/tachyons-background-size/-/tachyons-background-size-5.0.5.tgz#445fbe008125308ebe750262649e3f3f7c9de56f"
@@ -584,6 +592,14 @@ tachyons-overflow@*:
 tachyons-position@*:
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/tachyons-position/-/tachyons-position-6.0.4.tgz#3969217ace21c114ab923c8882240cf7f947cabe"
+
+tachyons-rotations@*:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/tachyons-rotations/-/tachyons-rotations-1.0.2.tgz#19bb7cc29aceaea56dc02b650241dafa32f0de62"
+
+tachyons-skins-pseudo@*:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tachyons-skins-pseudo/-/tachyons-skins-pseudo-1.0.3.tgz#33de70ef4f1a59e26244a8ba2f55f76e7bae1d63"
 
 tachyons-skins@*:
   version "4.0.3"
